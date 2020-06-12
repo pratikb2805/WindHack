@@ -1,0 +1,7 @@
+torch
+pyowm
+catboost
+plotly
+matplotlib
+numpy 
+pandas
