@@ -1,40 +1,38 @@
-import torch 
-from torch import nn
+import os
+
 import numpy as np
 import pandas as pd
-import os
-from catboost import CatBoostRegressor as cat
-from plotly.offline import plot
 import plotly.graph_objs as go
+import torch
+from catboost import CatBoostRegressor as cat
 from django.shortcuts import render
+from plotly.offline import plot
+from torch import nn
 
 
 class LSTM(nn.Module):
-	r"""
-	Model class for LSTM module using torch.nn.LSTM module
-	This will be trained for time-series forecasting.
-	"""
-    def __init__(self, input_dim = 2, 
-                 hidden_dim = 100, num_layers = 2, 
-                 output_dim = 2 , 
-                 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
-		r"""
-		-input_dim = 	Input dimension for LSTM network.
-						Default 2 (For Speed and Direction)
-		-hidden_dim = 	Hidden dimension for LSTM network.
-					  	Default 100.
-		-output_dim = 	Output dimension for LSTM network.
-						Default 2 (For Speed and Direction).
-		-num)layers = 	No. of iteration that will be performed on each example.
-		-device = 		Torch device for storing model class and related variables.
-						Default device will be enabled by system according to availability.
-		"""
+    r"""
+            Model class for LSTM module using torch.nn.LSTM module
+            This will be trained for time-series forecasting.
+            """
+    def __init__(self, input_dim = 2, hidden_dim = 100, num_layers = 2, output_dim = 2 ) :
+        """
+        -input_dim =     Input dimension for LSTM network.
+                        Default 2 (For Speed and Direction)
+        -hidden_dim =     Hidden dimension for LSTM network.
+                        Default 100.
+        -output_dim =     Output dimension for LSTM network.
+                        Default 2 (For Speed and Direction).
+        -num)layers =     No. of iteration that will be performed on each example.
+        -device =         Torch device for storing model class and related variables.
+                        Default device will be enabled by system according to availability.
+        """
         super(LSTM, self).__init__()
         # Hidden dimensions
         self.hidden_dim = hidden_dim
-
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         # Number of hidden layers
-		
+        
         self.num_layers = num_layers
         self.device = device
         # Building your LSTM
@@ -63,11 +61,11 @@ class LSTM(nn.Module):
         out = self.fc(out[:, -1, :]) 
         # out.size() --> 100, 10
         return out
-	
+    
 def get_model(checkpoint = 'weights.pth'):
     r"""
-    -checkpoint : 	Path to model's state_dict(weights)
-					Default - 'weights.pth'
+    -checkpoint :     Path to model's state_dict(weights)
+                    Default - 'weights.pth'
     """
     model = LSTM(input_dim = 2, hidden_dim = 100, num_layers = 2, output_dim = 2 )
     if checkpoint is not None:
@@ -84,12 +82,12 @@ def get_model(checkpoint = 'weights.pth'):
 
 class Predictor(nn.Module):
     r"""
-	This class instantiates an model instance and predicts upcoming speed and direction.
-	"""
+    This class instantiates an model instance and predicts upcoming speed and direction.
+    """
     def __init__(self, model):
-		r"""
-		-model = 	Model object which will forecast speed and direction.
-		"""
+        r"""
+        -model =     Model object which will forecast speed and direction.
+        """
         super(predictor, self).__init__()
         self.lstm = model.lstm
         self.fc = model.fc
@@ -97,16 +95,16 @@ class Predictor(nn.Module):
         self.model = model.cpu() 
     
     def predict(self, x, steps:int = 10, reduce:bool = True):
-		r"""
-		-x = torch.tensor
-		-steps = 	No. of future predictions to be made.
-					int
-					Default 10.
-		-reduce =	Whether to reduce inputs
-					(Divide by constants -> speed(25)
-										 -> direction(360))
-										 
-		"""
+        r"""
+        -x = torch.tensor
+        -steps =     No. of future predictions to be made.
+                    int
+                    Default 10.
+        -reduce =    Whether to reduce inputs
+                    (Divide by constants -> speed(25)
+                                         -> direction(360))
+                                         
+        """
         try:
             x = x.view(1, -1, 2)
         except:
@@ -133,12 +131,12 @@ class Predictor(nn.Module):
 
 class Tree(object):
     def __init__(self, checkpoint = 'regressor.cbm'):
-		r"""
-		Tree class which will predict energy output from wind speed and direction.
-		-checkpoint = 	Path for saved model.
-						type:	 str
-						Default: 'regressor.cbm'
-		"""
+        r"""
+        Tree class which will predict energy output from wind speed and direction.
+        -checkpoint =     Path for saved model.
+                        type:     str
+                        Default: 'regressor.cbm'
+        """
         self.model = cat()
         if checkpoint is not None:
             try:
@@ -201,7 +199,3 @@ def in_out(nsteps: int = 10):
     direction = 180.0
     grph = graph(speed, direction, n_steps = nsteps)
     return grph
-
-
-    
-    
