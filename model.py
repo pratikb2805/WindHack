@@ -154,7 +154,7 @@ class Tree(object):
 
 def get_speed():
     from pyowm.owm import OWM
-    owm = OWM('8f1b9a3225495a9c8a89cb7ff7848c08')
+    owm = OWM(API_KEY) 
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place('Tokyo,JP')
     wind_dict_in_meters_per_sec = observation.weather.wind()   # Default unit: 'meters_sec'
