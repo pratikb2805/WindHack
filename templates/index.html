@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Wind turbine</title>
+    <meta name= "viewport" content="width=device-width, initial-scale=1.0">
+    <!--Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+*{
+    padding: 0;
+    margin: 0;
+}
+.body{
+    background-color: #41BB90;
+}
+.main{
+    height: 590px;
+    margin:30px; 
+    background-color: #fff;
+    box-shadow: 0 0 8px #000;
+}
+.navbar-brand{
+    padding-left: 10px;
+    color: #000;
+    text-decoration: none;
+    font-family: "Trebuchet MS" !important;
+}
+.navbar-brand:hover{
+    color: #0007;
+}
+.navbar-toggler{
+    outline: none !important;
+    padding: 0 !important;
+
+}
+.navbar-toggler img{
+    width: 30px;
+    outline: none;
+}
+.nav-link{
+    border: none;
+    background:none; 
+}
+.nav-link img{
+    width: 35px;
+}
+.box{
+    height: 460px;
+    width: 70%;
+    margin: 10px 15px 10px 30px;
+    padding: 20px;
+    box-shadow: 0 0 4px 1px #0005;
+    background-color: #F9F9FB;
+}
+.input-box{
+    height: 220px;
+    width: 95%;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    text-align: center;
+}
+.input-box h3 , .output-box h3 ,.visual h3{
+    font-family:serif;
+    text-align: center;
+    font-size: 25px;
+    background-color: #0002;
+    color: #0008;
+}
+.output-box{
+   height: 170px;
+    width: 95%;
+    margin-left: 5px;
+}
+.output-box h5{
+    font-size: 15px;
+}
+#rangeValue{
+    border-bottom:  1px solid #0005;
+    text-align: center;
+    padding: 3px 70px;
+    color: #000;
+    font-weight: 600;
+}
+.range{
+    margin-bottom: 10px;
+}
+.slidecontainer{
+    padding: 10px 5px;
+}
+.slidecontainer h5{
+   margin-bottom: 15px;
+   font-size: 15px;
+}
+#myRange{
+  outline: none;
+  box-shadow: inset 0 0 5px #0005;
+  -webkit-appearance:none;
+  overflow: hidden;
+  border-radius: 8px;
+  width: 155px;
+}
+.hr{
+    font-size: 12px;
+}
+.hr1{
+    font-size: 12px;
+    margin-left: 110px;
+}
+.btn{
+    padding: 5px !important;
+    font-size: 15px;
+}
+.visual{
+    height: 460px;
+    border: 1px solid #E1F3FF;
+    width: 90%;
+    margin: 10px 15px 10px 15px;
+    padding: 20px;
+    box-shadow: 0 0 4px 1px #0005;
+}
+.graph{
+    border: 1px solid #005;
+    height:385px;
+}
+#time , #field{
+    border-bottom:  1px solid #0005;
+    text-align: center;
+    font-weight: 600;
+}
+@media only screen and (max-width: 765px){
+    .main{
+        height: 1200px;
+    }
+    .box{
+        height: 460px;
+        width: 80%;
+    }
+    .graph{
+        height: 350px;
+    }
+    .navbar-brand{
+        font-size: 17px !important;
+    }
+}
+@media only screen and (max-width: 1200px) and (min-width: 765px){
+    #myRange{
+        width: 90px;
+    }
+    .box{
+        height: 520px;
+        width: 80%;
+    }
+    .visual{
+        height: 520px;
+    }
+    #rangeValue{
+        padding: 3px 40px;
+    }
+    .output-box{
+        margin-top: 50px;
+    }
+    .hr1{
+       margin-left: 50px;
+    }
+    .main{
+        height:  630px;
+    }
+}
+</style>
+</head>
+<body class="body">
+<div class="container">
+    <div class="main">
+        <nav class="navbar navbar-expand-lg">
+           <a class="navbar-brand" href="#" class="brand">
+           <span class="head">Renewable Energy</a>
+           <ul class="navbar-nav ml-auto">
+             <li class="nav-item">
+                 <form>
+               <a class="nav-link" href="/"><img src= {{ url_for('static', filename = 'back.jpeg')}}></a>
+              </form>
+             </li>
+           </ul>
+       </nav>
+       <div class="row">
+         <div class="col-md-4">
+                  <div class="box">
+             <div class="input-box">
+                 <h3>Input</h3>
+                 <form  method="POST">
+                   <div class="slidecontainer">
+                     <h5>Duration (Hours)</h5>
+                     <div class="range"><span id="rangeValue">40</span></div>
+                     <input type="range" min="1" max="72" value="40" class="slider" id="myRange" onchange="change"
+                     ><br>
+                     <span class="hr">1Hr</span><span class="hr1">72Hr</span>
+                   </div>
+                   <button type="button" class="btn btn-outline-secondary" id ="btn">Submit</button>
+                 </form>
+             </div>
+             <div class="output-box">
+                  <h3>Output</h3>
+                  <h5>Maximum power output predicted is:</h5><div id="field">0<!--for output--></div><br>
+                  <h5>Best time to harvest:</h5><div id="time">0<!--for output--></div>
+             </div>
+           </div>
+         </div>
+         <div class="col-md-8">
+            <div class="visual">
+                <h3>Visualization of energy output</h3>
+               <div class="graph" id="graph">
+                   <!--for graph-->
+               </div>
+            </div>
+          </div>
+         </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("rangeValue");
+    output.innerHTML = slider.value; // Display the default slider value
+    
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+    
+
+    $('.btn').on('click', e=>{
+        e.preventDefault();
+        console.log($('#myRange').val())
+        $.ajax({
+            url: '/get',
+            method:'POST',  
+            data:{
+                range: $('#myRange').val()
+            },
+            success: function(resp ){
+                graphDiv = resp.graph;
+                powerMax = resp.maxPow;
+                time = resp.time;
+                $('#graph').html(graphDiv);
+                $('#field').text(powerMax);
+                $('#time').text(time);
+
+            }, 
+            error: function(){
+                alert('ERROR');
+            }
+        })})
+</script>
+</body>
+</html>
+
+
+
+
+
+

@@ -8,6 +8,8 @@ from catboost import CatBoostRegressor as cat
 from django.shortcuts import render
 from plotly.offline import plot
 from torch import nn
+from plotly.offline import plot
+from plotly.graph_objs import Scatter
 
 
 class LSTM(nn.Module):
@@ -88,7 +90,7 @@ class Predictor(nn.Module):
         r"""
         -model =     Model object which will forecast speed and direction.
         """
-        super(predictor, self).__init__()
+        super(Predictor, self).__init__()
         self.lstm = model.lstm
         self.fc = model.fc
         self.device = next(model.parameters()).device
@@ -154,9 +156,9 @@ class Tree(object):
 
 def get_speed():
     from pyowm.owm import OWM
-    owm = OWM(API_KEY) 
+    owm = OWM('8f1b9a3225495a9c8a89cb7ff7848c08') 
     mgr = owm.weather_manager()
-    observation = mgr.weather_at_place('Tokyo,JP')
+    observation = mgr.weather_at_place('New Delhi,IN')
     wind_dict_in_meters_per_sec = observation.weather.wind()   # Default unit: 'meters_sec'
     speed = wind_dict_in_meters_per_sec['speed']
     speed = float(speed)
@@ -172,6 +174,11 @@ def graph(speed: float = 10.0, direction:float = 180.0, n_steps:int = 40):
     -direction = initial Wind Direction (°).
     -n_steps = no of predictions to be made.
     """
+    from plotly.offline import plot
+    import plotly.graph_objs as go
+
+    fig = go.Figure()
+
     lstm = get_model()
     predictor = Predictor(lstm)
     x = torch.Tensor([speed/25, direction/360])
@@ -180,14 +187,29 @@ def graph(speed: float = 10.0, direction:float = 180.0, n_steps:int = 40):
     power = tree.forward(speed, direction)
     if type(power) != list:
         power = [ i for i in power]
-    plot_div = plot([Scatter(x=np.arange(len(power)), y=power,
-                        mode='lines', 
-                        opacity=0.8, marker_color='red')],
-               output_type='div')
- 
+    scatter = go.Scatter(x=np.arange(len(power)), y=power,
+                         mode='lines', name='Power Forecast',
+                         opacity=1.0, marker_color='red') 
     
-    
-    return plot_div
+    fig.add_trace(scatter)
+    fig.update_layout(    title={
+                                'text': f'Power output(kWh) forecast for next {n_steps//6} hrs',
+                                'y':0.9,
+                                'x':0.5,
+                                'xanchor': 'center',
+                                'yanchor': 'top'}, 
+                        xaxis_title="Time",
+                        yaxis_title="Power(kWh)",
+                        font=dict(
+                            family="Roboto, monospace",
+                            size=10,
+                            color="#000000"
+                        )
+                    )
+
+    plt_div = plot(fig, output_type='div')
+
+    return plt_div, max(power), np.argmax(power)
   
     
     

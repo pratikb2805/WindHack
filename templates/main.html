@@ -1,0 +1,176 @@
+<html>
+<head>
+<title>wind turbine</title>
+    <meta name= "viewport" content="width=device-width, initial-scale=1.0">
+    <!--Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        *{
+    padding: 0;
+    margin: 0;
+    
+}
+.body{
+    background-color: #41BB90;
+}
+.main{
+    height: 590px;
+    margin:30px; 
+    background-color: #fff;
+    box-shadow: 0 0 8px #000;
+}
+.navbar-brand{
+    padding-left: 10px;
+    color: #000;
+    text-decoration: none;
+    font-family: "Trebuchet MS" !important;
+}
+.navbar-brand:hover{
+    color: #0007;
+}
+.navbar-toggler{
+    outline: none !important;
+    padding: 0 !important;
+
+}
+.navbar-toggler img{
+    width: 30px;
+    outline: none;
+}
+.nav-link{
+    color: #0008 !important;
+    font-weight: 600;
+    font-size: 15px;
+}
+.navbar-nav{
+ margin-right: 20px;
+}
+.navbar-nav .nav-item .nav-link:hover{
+    color: #000 !important;
+}
+.heading{
+    padding: 80px 0px 20px 90px ;
+    background-color: #F9F9FB;
+    margin:0px 0px 20px 30px;
+    border-top-right-radius: 50px; 
+    height: 500px;
+}
+.heading h1{
+    font-size: 55px;
+    font-family: "Playfair Display" !important;
+}
+.heading h5{
+    color: #0008;
+    margin-bottom: 20px;
+    font-size: 11px;
+}
+.highlight{
+    color: #41BB90;
+}
+.heading p{
+    margin-top: 15px;
+  color: #0008;
+  font-size: 14px;
+}
+.windturbine-image{
+  margin-top: 30px;
+}
+.windturbine-image img{
+    width: 475px;
+}
+.btn{
+    border: 1px solid #41BB90;
+    color: #41BB90;
+}
+.btn:hover{
+    color: #fff;
+    background-color: #41BB90;
+}
+@media only screen and (max-width: 765px){
+    .main{
+        height: 140vh;
+    }
+    .heading h1{
+        font-size: 30px;
+    }
+    .heading{
+        padding: 80px 20px 20px 30px ;
+        margin:0px 15px 20px 15px;
+    }
+    .windturbine-image img{
+       width:250px;
+       margin:0px 15px 20px 15px;
+    }
+    .navbar-brand{
+        font-size: 17px !important;
+    }
+
+}
+@media only screen and (max-width: 1200px) and (min-width: 765px){
+    .main{
+        height: 48vh;
+    }
+    .heading h1{
+        font-size: 30px;
+    }
+    .heading p{
+        font-size: 11px;
+    }
+    .heading{
+        padding: 80px 20px 20px 30px ;
+         margin:0px 0px 20px 30px;
+        height: 40vh;
+    }
+    .windturbine-image img{
+       width:240px;
+       margin:0px 15px 20px 15px;
+    }
+}
+
+
+    </style>
+</head>
+<body class="body">
+<div class="container">
+     
+  <div class="main">
+        
+    <nav class="navbar navbar-expand-lg">
+           <a class="navbar-brand" href="#" class="brand">
+           <span class="head">Renewable Energy</a>
+  
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <img src={{ url_for('static', filename='toggle.jpeg') }}>
+        </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">&nbsp;&nbsp;About</a>
+      </li>
+      </ul>
+      </div>
+    </nav>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="heading">
+                <h5>Wind Turbines</h5>
+                <h1>The<br>Digital<br><span class="highlight">Wind Hack</span></h1>
+                <p>We propose a modern solution to predict the<br> energy output of a wind turbine,so that <br>natural resources can be utilized more efficiently.</p>
+                <a href="/view" class="btn btn-lg " tabindex="-1" role="button" aria-disabled="true">Calculate</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="windturbine-image">
+                <img src={{ url_for('static', filename='windturbine24.jpeg') }}>
+            </div>
+        </div>
+    </div>
+   </div>
+</div>
+</body>
+</html>
+
